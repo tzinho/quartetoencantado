@@ -2,12 +2,26 @@
 
 import { useState } from "react";
 
+import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { sendEmail } from "@/actions/resend";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  message: z.string(),
+});
 
 export const Contact = () => {
+  const form = useForm({
+    resolver: zodResolver(schema),
+  });
+
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: "",
@@ -15,12 +29,16 @@ export const Contact = () => {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    await sendEmail(formData);
+
     toast({
       title: "Mensagem enviada com sucesso!",
       description: "Vamos entrar em contato em breve!",
     });
+
     setFormData({ name: "", email: "", message: "" });
   };
 

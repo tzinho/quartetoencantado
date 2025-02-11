@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 import { fontMono, fontSans, fontTitle } from "@/config/fonts";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Quarteto Encantado",
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
         className={`${fontTitle.variable} ${fontSans.variable} ${fontMono.variable} antialiased`}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );
